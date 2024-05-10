@@ -11,6 +11,7 @@ Learn RF (with me) over a weekend.
 [SDR Crash Course](https://greatscottgadgets.com/sdr/)
 
 (Extension to course) [Youtube Training Series](https://www.youtube.com/playlist?list=PLu0BPYzTjiHru1KmPThmbY-8rRm3EWvUQ)
+
 [Miscellaneous HackRF Videos](https://www.youtube.com/playlist?list=PLu0BPYzTjiHqnqMgh0Gg5TAcrTiOeW76P)
 
 ### GNU
