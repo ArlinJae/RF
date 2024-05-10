@@ -6,6 +6,7 @@ Learn RF (with me) over a weekend.
 
 ### Theoretical 
 [Radio System Design](https://youtube.com/playlist?list=PLGF140BA5wtWgW9bAd6DtF3MaYbhPtFwd&si=Bu5R834sA-UY8G6g)
+[MIT Opencourseware: Digital Signals Processing](https://ocw.mit.edu/courses/res-6-008-digital-signal-processing-spring-2011/)
 
 ### SDR
 [Crash Course](https://greatscottgadgets.com/sdr/)
