@@ -20,8 +20,3 @@ Learn RF (with me) over a weekend.
 [GNURadio Wiki Guide](https://wiki.gnuradio.org/index.php/Tutorials)
 
 Hackday GNU Radio Companion Guide [Part One](https://www.youtube.com/watch?v=ufxBX_uNCa0) [Part Two](https://www.youtube.com/watch?v=m0GGBFBWFfU)
-
-## Schedule
-
-### 13-05-2024
-* 
