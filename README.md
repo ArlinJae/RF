@@ -7,7 +7,7 @@
     - [Learning Resources](#learning-resources)
     - [Tools I'd Recommend Learning](#tools-id-recommend-learning)
   - [GNSS Crash Course + Project](#gnss-crash-course--project)
-  - [Objective](#objective)
+    - [Objective](#objective)
     - [Game Plan](#game-plan)
     - [BS Pre-Requisities](#bs-pre-requisities)
       - [Install GNSS](#install-gnss)
@@ -18,6 +18,15 @@
       - [Convert RINEX Data to Baseband Signal](#convert-rinex-data-to-baseband-signal)
       - [Processing Data Using GNSS](#processing-data-using-gnss)
       - [Visualizing The Data](#visualizing-the-data)
+    - [Project: Autonomous Drone Interception Using GNSS and SDR](#project-autonomous-drone-interception-using-gnss-and-sdr)
+      - [Overview](#overview-1)
+      - [Data Generation](#data-generation)
+      - [GNSS-SDR Configuration](#gnss-sdr-configuration)
+        - [Signal Processing Blocks in GNSS-SDR:](#signal-processing-blocks-in-gnss-sdr)
+        - [Down The Line Implimentations](#down-the-line-implimentations)
+      - [Drone Simulation In Python](#drone-simulation-in-python)
+      - [Control Algorithm For The Drone](#control-algorithm-for-the-drone)
+      - [Simulation on GNU Radio](#simulation-on-gnu-radio)
 
 ## Overview
 I've decided to teach myself the basics of Radio Communication over a ~~weekend~~ (it was originally meant to be a weekend but I decided I wanted to spend a bit more time doing it) and this mainly serves as a repository of what were pretty good learning resources for me. 
@@ -72,17 +81,19 @@ The order in which I'm mentioning these are the orders in which I'm planning on 
 
 ## GNSS Crash Course + Project
 
-## Objective
-Get comfortable with GNSS systems
-Aim to build a GNSS Recieve Chain
-Run, Sample, Cross-Compile on ARM
-Aiming to use GNSS SDR as a GPS Receiving Software
+### Objective
+* Get comfortable with GNSS systems
+* Aim to build a GNSS Recieve Chain
+* Run, Sample, Cross-Compile on ARM
+* Aiming to use GNSS SDR as a GPS Receiving Software
 
 ### Game Plan
-- [ ] Go through GNSS Documentation + Example Tutorials
-- [ ] Go through [GNSS-SDRLIB](https://github.com/taroz/GNSS-SDRLIB) [^1]
-- [ ] Build out documentation for simple GNSS projects
-- [ ] Build out project with GNU Radio + GNSS SDR
+- [x] Go through GNSS Documentation + Example Tutorials
+- [x] Go through [GNSS-SDRLIB](https://github.com/taroz/GNSS-SDRLIB) [^1]
+- [x] Build out documentation for simple GNSS projects
+- [x] Build out project with GNU Radio + GNSS SDR
+
+[^1]: Designed for Windows infrastructure - see if I can find something similar for Linux/Unix.
 
 ### BS Pre-Requisities
 
@@ -270,4 +281,103 @@ You can use the plots to analyze the signal quality. Basically from this data we
 -  The Constellation Sink visualized the constellation of received signals, showing distinct clusters that corresponded to different satellites. 
 -  The Position Sink displayed the calculated positions, which were consistent with the expected location of the Montreal station.
 
+### Project: Autonomous Drone Interception Using GNSS and SDR
 
+#### Overview
+I wanted to work on a short project that combined GNU Radio and GNSS - thought a simple drone interception system would hit all the points, and be fundamental enough to build.
+
+The system will simulate the interception of a rogue drone using a friendly drone -- guided by GNSS data (from NASA / Canada website depending on whichever one is easiest to deal with). I'll create a GNSS receive chain using GNSS-SDR, processing synthetic GNSS data with GNU Radio, and implementing control algorithms in Python/C++.
+
+At the end, I'll run, sample, and cross-compile the project on an ARM platform, using GNSS-SDR as the GPS receiving software.
+
+#### Data Generation
+
+First, you must do the grueling process of getting some ephemeris data for the generation of the synthetic data. I used NASAs (instructions [here](https://cddis.nasa.gov/Data_and_Derived_Products/GNSS/broadcast_ephemeris_data.html)). 
+
+The easiest way I could find to generate synthetic data was through a repository called [GPS-SDR-SIM](https://github.com/osqzss/gps-sdr-sim). 
+
+Using this, I'm going to create a create a synthetic data generation for a city, (say San Francisco)
+
+```bash
+git clone https://github.com/osqzss/gps-sdr-sim.git
+cd gps-sdr-sim
+make
+```
+
+Now upzip the data you downloaded from the NASA portal and move it into this directory (it's ideal to name it something like ephemeris.24n). Once this is done, run -
+```bash
+./gps-sdr-sim -e ephemeris.24n -l 37.7749,-122.4194,30 -o gpssim.bin
+```
+
+Running this will spit out `gpssim.bin` in the same directory (I had to manually remove that from the commit since it was 3.5gb)
+
+Copy this file over to a new directory.
+
+#### GNSS-SDR Configuration
+
+Configure GNSS-SDR to process the synthetic GNSS data and then run `gnss-sdr --config_file=gnss-sdr.conf`.
+
+This will process the synthetic GNSS data and produce position fixes.
+
+##### Signal Processing Blocks in GNSS-SDR:
+* Acquisition: Use acquisition blocks to identify visible satellites and estimate their Doppler shift and code phase.
+* Tracking: Implement tracking loops (e.g., DLL, PLL) to refine the satellite signal parameters and extract the navigation message.
+* Navigation: Decode the navigation message to obtain ephemeris data and compute the position solution.
+
+##### Down The Line Implimentations
+* Multi-Constellation Support: Expand the system to support multiple GNSS constellations (e.g., GPS, GLONASS, Galileo) to increase accuracy and robustness.
+* Real-Time Processing: Implement real-time processing of GNSS signals using a Software Defined Radio (SDR) like USRP or RTL-SDR. This involves configuring the SDR as the input source in GNSS-SDR.
+```ini
+Copy code
+[GNSS-SDR]
+input_type=usrp
+usrp_address=192.168.10.2
+```
+* Advanced Signal Processing Techniques: Integrate advanced techniques like assisted GNSS (A-GNSS), precise point positioning (PPP), and differential GNSS (DGNSS) to enhance positioning accuracy.
+
+#### Drone Simulation In Python
+
+The drone simulation is plotted out in [this](drone_intercept/drones.py) code. Running this gets
+
+![simulation](drone_intercept/simulation.gif)
+
+#### Control Algorithm For The Drone
+
+You can also implement a control algorithm for the drone interception as done in [this](drone_intercept/control.cpp) file (can be run by running `g++ control.cpp -o control && ./control`). 
+
+This control system will plot each step to interception - 
+
+```
+Step 0: Friendly Position: (37.775, -122.419)
+Step 0: Rogue Position: (37.7859, -122.409)
+Step 1: Friendly Position: (37.775, -122.419)
+Step 1: Rogue Position: (37.7859, -122.409)
+Step 2: Friendly Position: (37.7751, -122.419)
+Step 2: Rogue Position: (37.7859, -122.409)
+...
+Step 150: Friendly Position: (37.7855, -122.409)
+Step 150: Rogue Position: (37.7855, -122.409)
+Rogue drone intercepted at step 150!
+```
+
+#### Simulation on GNU Radio
+
+* In GNU Radio Companion, create a new flowgraph by selecting File -> New.
+* Add a File Source Block. This block will read the synthetic GNSS data file (gpssim.bin).
+* Set the file path to the location of your gpssim.bin file.
+* Set the data type to short (since the synthetic data is in short format).
+* Add an Interleaved Short to Complex Block.
+* Add a Throttle Block. This block controls the flow rate of the data to prevent overloading.
+* Add Visualization Blocks which will generate the following graphs:
+
+
+![flow](drone_intercept/flow.png)
+
+* File Source Block: Reads the synthetic GNSS data file (gpssim.bin). The data type is set to short, as the synthetic data is in short format. This block outputs the raw data for further processing.
+* Interleaved Short to Complex Block: Converts the interleaved short data to complex data, which is a format more suitable for further signal processing.
+* Throttle Block: Controls the flow rate of the data and prevents overloading. The sample rate is set to 4M to match the data's sampling frequency.
+* Visualization Blocks: Generate the graphs. Specifically, the QT GUI Frequency Sink and QT GUI Time Sink blocks display the frequency spectrum and time domain signals, respectively. This helps in visualizing the processed GNSS data and understanding its characteristics.
+
+![graphs](drone_intercept/graphs.jpg)
+
+This setup allows me to see the real-time processing of the synthetic GNSS data, providing valuable insights into the signal characteristics and helping in the development of the drone interception system.
