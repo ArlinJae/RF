@@ -40,10 +40,10 @@ The order in which I'm mentioning these are the orders in which I'm planning on 
 |---|---|---|---|---|---|
 | + | [Intro To Antenna Basics](https://www.youtube.com/playlist?list=PL_tws4AXg7authztKFg5ZN5qWGtq3N_nI) | Hackaday | Theory/AntennaDesign | 6 | [Notes](!_Intro_To_Antenna_Basics.pdf) |
 | ! | [Radio System Design](https://youtube.com/playlist?list=PLGF140BA5wtWgW9bAd6DtF3MaYbhPtFwd&si=Bu5R834sA-UY8G6g) | Dr David S. Ricketts | Theory/ Introduction | 4 | [Notes](!_Radio_System_Design.pdf)/ TBC |
-| ! | Transmission Lines | Dr Simarjeet Saini | Theory/Advanced | - | - |
-| ! | [Opencourseware: Digital Signals Processing](https://ocw.mit.edu/courses/res-6-008-digital-signal-processing-spring-2011/) | MIT Open Courseware | Theory/ Digital Signal Processing | - | - |
+| ! | Transmission Lines | Dr Simarjeet Saini | Theory/Advanced | 10 | - |
+| ! | [Opencourseware: Digital Signals Processing](https://ocw.mit.edu/courses/res-6-008-digital-signal-processing-spring-2011/) | MIT Open Courseware | Theory/ Digital Signal Processing | 7 | - |
 | ! | [SDR](https://greatscottgadgets.com/sdr/) | Great Scott Gadgets | Practical/ SDR | - | - |
-| ! | [GNU Radio Companion Guide](https://www.youtube.com/watch?v=ufxBX_uNCa0) ([#2](https://www.youtube.com/watch?v=m0GGBFBWFfU)) | Hackaday | Practical/ GNU Radio | 1 | - |
+| ! | [GNU Radio Companion Guide](https://www.youtube.com/watch?v=ufxBX_uNCa0) ([#2](https://www.youtube.com/watch?v=m0GGBFBWFfU)) | Hackaday | Practical/ GNU Radio | 2 | - |
 | - | [Intro To RF Basics](https://www.youtube.com/playlist?list=PLHiqssciYZ4g6eZxJzTUwrMZ_1YeqLH6W) | Mark Watson | Theory/Introduction | - |
 | - | [RF/ Antenna Fundamentals Fundamentals](https://www.youtube.com/playlist?list=PLYLLZZmhkxwGMCROhyxopDUOPvD9K6J3wy) | Hank Ottey | Theory/Introduction | - |
 | - | [Intro To Radar Systems (MIT Lincoln Lab)](https://www.youtube.com/playlist?list=PLUJAYadtuizA8RC2Qk8LfmiWA56HZsk9y) | Dr. Robert M. O'Donnell | Theory/Radar | - |
