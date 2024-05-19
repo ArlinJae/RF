@@ -27,6 +27,9 @@
       - [Drone Simulation In Python](#drone-simulation-in-python)
       - [Control Algorithm For The Drone](#control-algorithm-for-the-drone)
       - [Simulation on GNU Radio](#simulation-on-gnu-radio)
+  - [Performance Testing Of GNSS-SDR](#performance-testing-of-gnss-sdr)
+    - [Generate the GPS Simulation Data](#generate-the-gps-simulation-data)
+    - [Run GNSS-SDR](#run-gnss-sdr)
 
 ## Overview
 I've decided to teach myself the basics of Radio Communication over a ~~weekend~~ (it was originally meant to be a weekend but I decided I wanted to spend a bit more time doing it) and this mainly serves as a repository of what were pretty good learning resources for me. 
@@ -381,3 +384,142 @@ Rogue drone intercepted at step 150!
 ![graphs](drone_intercept/graphs.jpg)
 
 This setup allows me to see the real-time processing of the synthetic GNSS data, providing valuable insights into the signal characteristics and helping in the development of the drone interception system.
+
+
+## Performance Testing Of GNSS-SDR
+
+### Generate the GPS Simulation Data
+
+ Similar to the process we did in one of the projects -- 
+
+ First, you must do the grueling process of getting some ephemeris data for the generation of the synthetic data. I used NASAs (instructions [here](https://cddis.nasa.gov/Data_and_Derived_Products/GNSS/broadcast_ephemeris_data.html)). 
+
+The easiest way I could find to generate synthetic data was through a repository called [GPS-SDR-SIM](https://github.com/osqzss/gps-sdr-sim). 
+
+```bash
+git clone https://github.com/osqzss/gps-sdr-sim.git
+cd gps-sdr-sim
+make
+```
+
+Now upzip the data you downloaded from the NASA portal and move it into this directory (it's ideal to name it something like `ephemeris.24n`). Once this is done, run -
+
+Using this, I'm going to create a create a synthetic data generation for a city, say San Francisco. You can replace it with your own coordinates. 
+
+```bash
+./gps-sdr-sim -e ephemeris.24n -l 37.7749,-122.4194,30 -o gpssim.bin
+```
+
+Running this will spit out `gpssim.bin` in the same directory (I had to manually remove that from the commit since it was 3.5gb).
+
+### Run GNSS-SDR 
+
+Configure GNSS-SDR to process the generated GPS simulation data. Create a configuration file (e.g., gps_sdr_config.conf) and specify the input data file, then run GNSS - 
+
+```bash
+time gnss-sdr --config_file=gps_sdr_config.conf
+top
+htop
+perf stat gnss-sdr --config_file=gps_sdr_config.conf
+```
+
+Taking this a step further, you can automate this by putting it in a script -
+
+```Python
+import os
+import subprocess
+import time
+import psutil
+from datetime import datetime
+
+# Paths
+gps_sdr_sim_path = "./gps-sdr-sim"
+gnss_sdr_path = "gnss-sdr"
+config_file = "gnss-sdr.conf"
+rinex_file = "brdc3540.14n"
+output_bin = "gpssim.bin"
+log_file = "gnss-sdr.log"
+
+# Configuration for GPS simulation
+latitude = 30.286502
+longitude = 120.032669
+altitude = 100
+
+def generate_gps_signal():
+    print("Generating GPS signal...")
+    cmd = f"{gps_sdr_sim_path} -e {rinex_file} -l {latitude},{longitude},{altitude} -o {output_bin}"
+    subprocess.run(cmd, shell=True, check=True)
+    print("GPS signal generated.")
+
+def run_gnss_sdr():
+    print("Running GNSS-SDR...")
+    cmd = f"{gnss_sdr_path} --config_file={config_file} > {log_file} 2>&1"
+    start_time = time.time()
+    subprocess.run(cmd, shell=True, check=True)
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"GNSS-SDR run completed in {elapsed_time:.2f} seconds.")
+    return elapsed_time
+
+def measure_performance():
+    print("Measuring performance...")
+    cmd = f"/usr/bin/time -v {gnss_sdr_path} --config_file={config_file} > {log_file} 2>&1"
+    result = subprocess.run(cmd, shell=True, stderr=subprocess.PIPE, text=True)
+    memory_usage = parse_memory_usage(result.stderr)
+    print("Performance measurement completed.")
+    return memory_usage
+
+def parse_memory_usage(stderr_output):
+    for line in stderr_output.split('\n'):
+        if "Maximum resident set size" in line:
+            return int(line.split(":")[1].strip())
+    return 0
+
+def log_cpu_usage(process):
+    print("Logging CPU usage...")
+    cpu_usage_log = []
+    try:
+        while process.poll() is None:
+            cpu_usage_log.append(psutil.cpu_percent(interval=1))
+    except psutil.NoSuchProcess:
+        pass
+    print("CPU usage logging completed.")
+    return cpu_usage_log
+
+def analyze_logs():
+    print("Analyzing logs...")
+    acquisition_count = 0
+    tracking_count = 0
+    with open(log_file, 'r') as file:
+        for line in file:
+            if "Acquisition" in line:
+                acquisition_count += 1
+            elif "Tracking" in line:
+                tracking_count += 1
+    print(f"Found {acquisition_count} acquisition messages and {tracking_count} tracking messages in logs.")
+    return acquisition_count, tracking_count
+
+if __name__ == "__main__":
+    start_time = datetime.now()
+    print(f"Test started at {start_time}")
+
+    generate_gps_signal()
+
+    memory_usage = measure_performance()
+    elapsed_time = run_gnss_sdr()
+    
+    acquisition_count, tracking_count = analyze_logs()
+
+    end_time = datetime.now()
+    print(f"Test completed at {end_time}")
+    print(f"Elapsed time: {elapsed_time:.2f} seconds")
+    print(f"Memory usage: {memory_usage} KB")
+    print(f"Acquisitions: {acquisition_count}")
+    print(f"Trackings: {tracking_count}")
+
+    total_test_time = end_time - start_time
+    print(f"Total test duration: {total_test_time}")
+
+    print("Testing completed.")
+```
+
