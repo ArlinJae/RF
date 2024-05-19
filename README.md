@@ -424,3 +424,8 @@ perf stat gnss-sdr --config_file=gps_sdr_config.conf
 ```
 
 Taking this a step further, you can automate this by putting it in a script like done [here](gnss-testing/testing.py)
+
+
+
+
+
