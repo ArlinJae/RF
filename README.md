@@ -82,7 +82,7 @@ The order in which I'm mentioning these are the orders in which I'm planning on 
 | [bladeGPS](https://github.com/osqzss/bladeGPS)                      | Real-Time Signal Generation (BladeRF) | -     |
 | [OpenTsiolkovsky](https://github.com/istellartech/OpenTsiolkovsky)  | Rocket Flight Simulator               | -     |
 | [GNSS-SDRLIB](https://github.com/taroz/GNSS-SDRLIB)                 | SDR-Toolkit                           | -     |
-| [GPS-SDR-SIM](https://github.com/osqzss/gps-sdr-sim]                | Synthetic GPS Signal Generator        | -     |
+| [GPS-SDR-SIM](https://github.com/osqzss/gps-sdr-sim)                | Synthetic GPS Signal Generator        | -     |
 
 
 ## GNSS Crash Course + Project
