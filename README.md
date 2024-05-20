@@ -74,7 +74,6 @@ The order in which I'm mentioning these are the orders in which I'm planning on 
 | - | [Wireless Communications (IIT-D)](https://www.youtube.com/playlist?list=PL33AB52ED9A7873C0) | Dr.Ranjan Bose | Theory/Advanced | - |
 
 
-
 ### Tools I'd Recommend Learning
 | Tool                                                                | Use                                   | Notes |
 | ------------------------------------------------------------------- | ------------------------------------- | ----- |
