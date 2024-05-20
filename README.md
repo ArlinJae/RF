@@ -76,10 +76,14 @@ The order in which I'm mentioning these are the orders in which I'm planning on 
 
 
 ### Tools I'd Recommend Learning
-| Tool | Use | Free For Students | Notes |
-|---|---|---|---|
-| [CENOS](https://www.cenos-platform.com/) | Simulation/RF | - |
-| [Ansys HFSS](https://www.ansys.com/products/electronics/ansys-hfss) | Simulation/HF | - |
+| Tool                                                                | Use                                   | Notes |
+| ------------------------------------------------------------------- | ------------------------------------- | ----- |
+| [CENOS](https://www.cenos-platform.com/)                            | Simulation/RF                         | -     |
+| [Ansys HFSS](https://www.ansys.com/products/electronics/ansys-hfss) | Simulation/HF                         | -     |
+| [bladeGPS](https://github.com/osqzss/bladeGPS)                      | Real-Time Signal Generation (BladeRF) | -     |
+| [OpenTsiolkovsky](https://github.com/istellartech/OpenTsiolkovsky)  | Rocket Flight Simulator               | -     |
+| [GNSS-SDRLIB](https://github.com/taroz/GNSS-SDRLIB)                 | SDR-Toolkit                           | -     |
+| [GPS-SDR-SIM](https://github.com/osqzss/gps-sdr-sim]                | Synthetic GPS Signal Generator        | -     |
 
 
 ## GNSS Crash Course + Project
