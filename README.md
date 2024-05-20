@@ -71,7 +71,7 @@ The order in which I'm mentioning these are the orders in which I'm planning on 
 | - | [Intro To RF Basics](https://www.youtube.com/playlist?list=PLHiqssciYZ4g6eZxJzTUwrMZ_1YeqLH6W) | Mark Watson | Theory/Introduction | - |
 | - | [RF/ Antenna Fundamentals Fundamentals](https://www.youtube.com/playlist?list=PLYLLZZmhkxwGMCROhyxopDUOPvD9K6J3wy) | Hank Ottey | Theory/Introduction | - |
 | - | [Intro To Radar Systems (MIT Lincoln Lab)](https://www.youtube.com/playlist?list=PLUJAYadtuizA8RC2Qk8LfmiWA56HZsk9y) | Dr. Robert M. O'Donnell | Theory/Radar | - |
-| - | [Wireless Communications (IIT-D)](https://www.youtube.com/playlist?list=PL33AB52ED9A7873C0) | Dr.Ranjan Bose | Theory/Advanced | - |
+| - | [Wireless Communications (IIT-D)](https://www.youtube.com/playlist?list=PL33AB52ED9A7873C0) | Dr. Ranjan Bose | Theory/Advanced | - |
 
 
 ### Tools I'd Recommend Learning
